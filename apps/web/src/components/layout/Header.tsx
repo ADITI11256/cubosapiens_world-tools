@@ -52,15 +52,32 @@ export default function Header()
   useEffect(() => {
     if(searchOpen) searchRef.current?.focus()
   }, [searchOpen])
-
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault()
-    if(search.trim()) {
-      router.push(`/search?q=${encodeURIComponent(search.trim())}`)
-      setSearchOpen(false)
-      setSearch("")
-    }
+function handleSearch(e: React.FormEvent) {
+  e.preventDefault()
+  if(search.trim()) {
+    router.push(`/search?q=${encodeURIComponent(search.trim())}`)
+    setSearchOpen(false)
+    setSearch("")
   }
+}
+const handleShare = async () => {
+  const shareData = {
+    title: "CUBOSAPIENS",
+    text: "Free tools, games & AI — no signup needed!",
+    url: "https://cubosapiens.world",
+  }
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData)
+    } else {
+      await navigator.clipboard.writeText(shareData.url)
+      alert("Link copied to clipboard!")
+    }
+  } catch (error) {
+    console.error("Share failed:", error)
+  }
+}
 
   return (
     <>
@@ -161,6 +178,12 @@ export default function Header()
         {/* ── MOBILE DROPDOWN MENU ── */}
         {menuOpen && (
           <div className="header-dropdown" ref={menuRef}>
+           <button
+  className="dropdown-promo-btn"
+  onClick={handleShare}
+>
+  <i className="fa-solid fa-share-nodes"></i> Share Website
+</button>
 
             {/* Nav links */}
             <div className="dropdown-section">
@@ -199,23 +222,7 @@ export default function Header()
 
             <div className="dropdown-divider" />
 
-            {/* Promo */}
-            <div className="dropdown-promo">
-              <p className="dropdown-promo-title"><i className="fa-solid fa-share-nodes"></i> Share CUBOSAPIENS</p>
-              <p className="dropdown-promo-desc">Free tools & games for everyone — share with friends!</p>
-              <button
-                className="dropdown-promo-btn"
-                onClick={() => {
-                  navigator.share?.({
-                    title: "CUBOSAPIENS",
-                    text:  "Free tools, games & AI — no signup needed!",
-                    url:   "https://cubosapiens.world",
-                  }) ?? navigator.clipboard.writeText("https://cubosapiens.world")
-                }}
-              >
-                Share Link
-              </button>
-            </div>
+          
 
           </div>
         )}
