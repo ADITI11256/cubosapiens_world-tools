@@ -2,7 +2,8 @@
 
 import { useState }  from "react"
 import ToolCard      from "@/components/ui/ToolCard"
-import type { Tool } from "@/types"
+import GameCard      from "@/components/ui/GameCard" 
+import type { Tool, Games } from "@/types"
 
 const categories = [
   { key: "all",       label: "All"       },
@@ -11,42 +12,54 @@ const categories = [
   { key: "generator", label: "⚡ Generator" },
   { key: "text",      label: "✏️ Text"   },
   { key: "converter", label: "🔄 Converter" },
+  { key: "game",      label: "🎮 Games"   }, 
 ]
 
 interface Props {
   tools:        Tool[]
+  games:        Games[] 
   initialQuery: string
 }
 
-export default function SearchResults({ tools, initialQuery }: Props)
+// Our unified type for the search array
+type SearchItem = 
+  | (Tool & { itemType: "tool"; unifiedCategory: string })
+  | (Games & { itemType: "game"; unifiedCategory: string })
+
+export default function SearchResults({ tools, games, initialQuery }: Props)
 {
   const [query,  setQuery]  = useState(initialQuery)
   const [active, setActive] = useState("all")
 
-  const results = tools.filter(t => {
-    const matchCat    = active === "all" || t.category === active
+  const allItems: SearchItem[] = [
+    ...tools.map((t): SearchItem => ({ ...t, itemType: "tool", unifiedCategory: t.category })),
+    ...games.map((g): SearchItem => ({ ...g, itemType: "game", unifiedCategory: g.genre || "game" }))
+  ]
+
+  const results = allItems.filter(item => {
+    const matchCat    = active === "all" || item.unifiedCategory === active
     const q           = query.toLowerCase()
+    
     const matchSearch = !q ||
-      t.name.toLowerCase().includes(q) ||
-      t.description.toLowerCase().includes(q) ||
-      t.category.toLowerCase().includes(q)
+      item.name.toLowerCase().includes(q) ||
+      item.description.toLowerCase().includes(q) ||
+      item.unifiedCategory.toLowerCase().includes(q)
+      
     return matchCat && matchSearch
   })
 
   return (
     <>
-      {/* Search input */}
       <div className="tools-search-wrap">
         <input
           className="tools-search"
-          placeholder="Search tools..."
+          placeholder="Search tools and games..."
           value={query}
           onChange={e => setQuery(e.target.value)}
           autoFocus
         />
       </div>
 
-      {/* Filters */}
       <div className="filter-tabs">
         {categories.map(cat => (
           <button
@@ -59,22 +72,27 @@ export default function SearchResults({ tools, initialQuery }: Props)
         ))}
       </div>
 
-      {/* Count */}
       <p className="tools-count">
         {results.length} result{results.length !== 1 ? "s" : ""}
       </p>
 
-      {/* Grid */}
       {results.length > 0 ? (
         <div className="tool-grid">
-          {results.map((tool, i) => (
-            <ToolCard key={tool.id} tool={tool} index={i} />
-          ))}
+          {results.map((item, i) => {
+            // By explicitly casting `as Tool` and `as Games`, 
+            // we stop TypeScript from complaining about the extra properties 
+            // we added during the merge.
+            if (item.itemType === "tool") {
+              return <ToolCard key={`tool-${item.id}`} tool={item as Tool} index={i} />
+            } else {
+              return <GameCard key={`game-${item.id}`} game={item as Games} index={i} />
+            }
+          })}
         </div>
       ) : (
         <div className="empty-state">
           <p>No results found</p>
-          <span>Try different keywords or browse all tools</span>
+          <span>Try different keywords or browse all categories</span>
         </div>
       )}
     </>
