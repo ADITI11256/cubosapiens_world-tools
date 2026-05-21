@@ -13,5 +13,8 @@
   "devDependencies": {
     "turbo": "latest",
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.2.0"
   }
 }
