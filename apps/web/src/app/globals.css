@@ -3061,7 +3061,6 @@ a {
   }
 }
   .about-stat-value { font-size: 24px; }
-}
 
 @keyframes skeleton-pulse {
   0%, 100% { opacity: 0.4; }
