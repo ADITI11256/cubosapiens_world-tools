@@ -1,8 +1,6 @@
 import { Hono }           from "hono"
 import { cors }           from "hono/cors"
 import { createClient }   from "@supabase/supabase-js"
-import blogRoutes         from "./routes/blog"
-
 // ─────────────────────────────────────────────────────────────
 // Types — what our data looks like
 // ─────────────────────────────────────────────────────────────
@@ -374,13 +372,6 @@ app.post("/api/counter/download", async (c) => {
   })
 
 })
-
-// ── Blog routes ───────────────────────────────────────────────
-// GET  /api/blogs
-// GET  /api/blogs/:id
-// POST /api/blogs
-
-app.route("/", blogRoutes)
 
 
 export default app
