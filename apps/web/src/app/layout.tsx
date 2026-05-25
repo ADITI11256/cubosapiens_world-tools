@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer"
 import TrackVisit from "@/components/TrackVisit"
 import { cn } from "@/lib/utils";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt"
+import CookieBanner from "@/components/CookieBanner"
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 
@@ -87,6 +88,7 @@ export default function RootLayout({
         <main>{children}</main>
         <Footer />
         <PWAInstallPrompt />
+        <CookieBanner />
       </body>
     </html>
   )
