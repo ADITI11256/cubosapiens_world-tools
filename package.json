@@ -13,5 +13,9 @@
   "devDependencies": {
     "turbo": "latest",
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.8.0",
+    "zod": "^4.4.3"
   }
 }
