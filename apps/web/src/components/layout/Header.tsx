@@ -25,6 +25,7 @@ const moreLinks = [
 export default function Header({ hasLiveAi }: { hasLiveAi: boolean }) {
   const [visitors, setVisitors] = useState<number | null>(null)
   const [search, setSearch] = useState("")
+  const [stars, setStars] = useState<number | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const pathname = usePathname()
@@ -68,6 +69,13 @@ export default function Header({ hasLiveAi }: { hasLiveAi: boolean }) {
       document.body.style.overflow = ""
     }
   }, [menuOpen])
+
+  useEffect(() => {
+  fetch("https://api.github.com/repos/rk192324217/cubosapiens_world-tools")
+    .then(res => res.json())
+    .then(data => setStars(data.stargazers_count))
+    .catch(() => setStars(null))
+}, [])
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault()
@@ -154,6 +162,15 @@ export default function Header({ hasLiveAi }: { hasLiveAi: boolean }) {
 
           {/* ── RIGHT SIDE ── */}
           <div className="header-right flex items-center gap-3">
+            <a
+           href="https://github.com/rk192324217/cubosapiens_world-tools"
+           target="_blank"
+           rel="noopener noreferrer"
+           className="flex items-center gap-1 px-2 py-1 rounded bg-black/40 hover:bg-black/60 text-white text-sm"
+           >
+           <i className="fa-solid fa-star text-yellow-400"></i>
+           <span>{stars !== null ? stars : "..."}</span>
+           </a>
 
             {/* Desktop search bar */}
             <form onSubmit={handleSearch} className="header-search-form !hidden lg:!flex items-center">
