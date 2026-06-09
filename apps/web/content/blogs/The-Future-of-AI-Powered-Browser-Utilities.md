@@ -100,7 +100,7 @@ The absolute biggest superpower of AI powered browsing is **Productivity**. For 
 
 The Web Browser of tomorrow will be **lightyears** ahead of anything we click on today. The future of AI browser utilities is all about **Action**. It will transform from a simple viewing window into an **active, Intelligent Partner**.
 
-![AI Powered Browser Utilities Appearing When searching query "pdf compressor"](../how-future-ai-powerd-browser-utilities-look-like.jpg)
+![Cubosapiens world showcase it's own broswer unilities with future features](../browser-utilities-by-cubosapiens.jpg)
 
 ### **The Power of "Do It For Me" Research**
 With Next-Generation AI browser utilities, your browser does all the **heavy lifting** behind the Scenes.Within seconds, it will scan the entire internet, build a neat **comparison chart**, filter out fake reviews, and hand you a beautiful, completed report.
