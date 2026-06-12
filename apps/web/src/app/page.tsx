@@ -1,6 +1,6 @@
 import { fetchTools, fetchGames } from "@/lib/api"
-import ToolGrid   from "@/components/ui/ToolGrid"
-import GameGrid   from "@/components/ui/GameGrid"
+import ToolGrid from "@/components/ui/ToolGrid"
+import GameGrid from "@/components/ui/GameGrid"
 import AiAccessButton from "@/components/ui/AIAccessButton"
 // import ColorBends from "@/components/colorbends"
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -8,85 +8,65 @@ import AiAccessButton from "@/components/ui/AIAccessButton"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title:       "CUBOSAPIENS",
+  title: "CUBOSAPIENS",
   description: "Free browser-based tools, games and AI for everyone. No signup, no cost, simply works in your browser.",
-  keywords:    ["free online tools", "browser tools", "GPS photo stamp", "QR code generator", "image compressor", "PDF merger", "word counter", "free games", "AI tools", "cubosapiens", "AI Games", "Virtual Games"],
-  authors:     [{ name: "CUBOSAPIENS", url: "https://cubosapiens.world" }],
-  creator:     "CUBOSAPIENS",
+  keywords: ["free online tools", "browser tools", "GPS photo stamp", "QR code generator", "image compressor", "PDF merger", "word counter", "free games", "AI tools", "cubosapiens", "AI Games", "Virtual Games"],
+  authors: [{ name: "CUBOSAPIENS", url: "https://cubosapiens.world" }],
+  creator: "CUBOSAPIENS",
   metadataBase: new URL("https://cubosapiens.world"),
   alternates: {
     canonical: "https://www.cubosapiens.world",
   },
   openGraph: {
-    type:        "website",
-    locale:      "en_US",
-    url:         "https://cubosapiens.world",
-    siteName:    "CUBOSAPIENS",
-    title:       "CUBOSAPIENS — Free Tools, Games & AI all in One Place",
+    type: "website",
+    locale: "en_US",
+    url: "https://cubosapiens.world",
+    siteName: "CUBOSAPIENS",
+    title: "CUBOSAPIENS — Free Tools, Games & AI all in One Place",
     description: "Free browser tools, games and AI for everyone. No accounts. No cost. Just open and use.",
     images: [{
-      url:    "https://cubosapiens.world/og-image.png",
-      width:  1200,
+      url: "https://cubosapiens.world/og-image.png",
+      width: 1200,
       height: 630,
-      alt:    "CUBOSAPIENS — Free Tools, Games & AI",
+      alt: "CUBOSAPIENS — Free Tools, Games & AI",
     }],
   },
   twitter: {
-    card:        "summary_large_image",
-    title:       "CUBOSAPIENS — Free Tools, Games & AI in One Place",
+    card: "summary_large_image",
+    title: "CUBOSAPIENS — Free Tools, Games & AI in One Place",
     description: "Free browser tools, games and AI for everyone. No accounts. No cost.",
-    images:      ["https://cubosapiens.world/og-image.png"],
+    images: ["https://cubosapiens.world/og-image.png"],
   },
   robots: {
-    index:               true,
-    follow:              true,
+    index: true,
+    follow: true,
     googleBot: {
-      index:             true,
-      follow:            true,
-      "max-image-preview":   "large",
-      "max-snippet":         -1,
-      "max-video-preview":   -1,
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
     },
   },
 }
 
-export default async function HomePage()
-{
+export default async function HomePage() {
   // Fetch all three in parallel — no waterfall
-  const [tools, games, aiTools] = await Promise.all([
+  const [alltools, games, aiTools] = await Promise.all([
     fetchTools(),
     fetchGames(),
     fetchTools({ category: "ai" }),
   ])
 
   const aiHasLive = aiTools.some(t => t.isLive)
+  const tools = alltools.filter(tool => tool.category != "ai")
 
   return (
     <div>
 
-      {/* ── BACKGROUND — fixed, covers whole page ── */}
-      {/* <div className="app-background">
-        <ColorBends
-          rotation={30}
-          speed={0.08}
-          colors={["#47d306", "#b6ff88", "#fafafa", "#00bf76"]}
-          transparent={false}
-          autoRotate={0.3}
-          scale={1.4}
-          frequency={0.7}
-          warpStrength={0.6}
-          mouseInfluence={0.2}
-          parallax={0.1}
-          noise={0.02}
-        />
-      </div> */}
-
       {/* ── HERO GLOW — subtle top radial ── */}
       <div className="hero-glow" />
 
-      {/* ══════════════════════════════════
-          HERO
-      ══════════════════════════════════ */}
       <section className="hero">
 
         {/* <div className="hero-eyebrow">
@@ -123,10 +103,6 @@ export default async function HomePage()
         </div>
 
       </section>
-
-      {/* ══════════════════════════════════
-          TOOLS
-      ══════════════════════════════════ */}
       <section className="section">
         <div className="section-header">
           <div>
@@ -140,77 +116,45 @@ export default async function HomePage()
           maxItems={11}
         />
       </section>
-<div className="section" style={{ paddingBottom: 0 }}>
+      <div className="section" style={{ paddingBottom: 0 }}>
       </div>
-      {/* ══════════════════════════════════
-          GAMES
-      ══════════════════════════════════ */}
       <section className="section">
         <div className="section-header">
           <div>
-            <span className="section-tag">Play in browser</span>
+            {/* <span className="section-tag">Play in browser</span> */}
             <h2 className="section-title">
               Games
-              {games.filter(g => g.isLive).length === 0 && (
-                <span className="section-title-muted">— coming soon</span>
-              )}
             </h2>
           </div>
         </div>
 
-          <GameGrid
-            games={games}
-            seeMoreHref="/games"
-            seeMoreLabel="All Games"
-            maxItems={11}
-          />
+        <GameGrid
+          games={games}
+          seeMoreHref="/games"
+          seeMoreLabel="All Games"
+          maxItems={11}
+        />
       </section>
-<div className="section" style={{ paddingBottom: 0 }}>
+      <div className="section" style={{ paddingBottom: 0 }}>
       </div>
-      {/* ══════════════════════════════════
-          AI TOOLS
-      ══════════════════════════════════ */}
       <section className="section">
         <div className="section-header">
           <div>
             <span className="section-tag">Powered by AI</span>
             <h2 className="section-title">
               AI Tools
-              {aiTools.filter(t => t.isLive).length === 0 && (
-                <span className="section-title-muted">- coming soon</span>
-              )}
             </h2>
           </div>
         </div>
 
-        {aiTools.length > 0 ? (
-          // Real tools from the database — reuse the same ToolGrid
-          <ToolGrid
-            tools={aiTools}
-            seeMoreHref="/ai"
-            seeMoreLabel="All AI Tools"
-            maxItems={4}
-            faded={aiTools.every(t => !t.isLive)}
-          />
-        ) : (
-          // No AI tools seeded yet — keep the "coming soon" feel
-          <div className="tool-grid-faded">
-            {[
-              { icon: "🤖", name: "AI Chat"      },
-              { icon: "✍️", name: "AI Writer"    },
-              { icon: "🎨", name: "AI Image"     },
-              { icon: "📊", name: "AI Summarise" },
-            ].map((a, i) => (
-              <div key={i} className="tool-card tool-card-soon">
-                <div className="tool-card-badge">
-                  <span className="badge-soon">SOON</span>
-                </div>
-                <div className="tool-card-icon">{a.icon}</div>
-                <div><p className="tool-card-name">{a.name}</p></div>
-              </div>
-            ))}
-          </div>
-        )}
+
+        <ToolGrid
+          tools={aiTools}
+          seeMoreHref="/ai"
+          seeMoreLabel="All AI Tools"
+          maxItems={4}
+          faded={aiTools.every(t => !t.isLive)}
+        />
       </section>
     </div>
   )
